@@ -1,0 +1,10 @@
+name: demo
+on: 
+  workflow_dispatch: # user tu bam moi chay
+jobs:
+  job_demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run a one-line script
+        run: echo "Hello, World!"
+  
