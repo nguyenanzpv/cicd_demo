@@ -7,4 +7,14 @@ jobs:
     steps:
       - name: Run a one-line script
         run: echo "Hello, World!"
+  job_b:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run check config
+        run: df -h
+  job_c:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run check config
+        run: free -h
   
