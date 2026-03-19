@@ -2,19 +2,40 @@ name: demo
 on: 
   workflow_dispatch: # user tu bam moi chay
 jobs:
-  job_demo:
+  job_1:
     runs-on: ubuntu-latest
+    outputs:
+      data: "${{ steps.step_id.outputs.data_in}}"
     steps:
-      - name: Run a one-line script
-        run: echo "Hello, World!"
-  job_b:
+      - id: step_id
+        run: |
+          echo "data_in=1" >> $GITHUB_OUTPUT
+  job_2:
     runs-on: ubuntu-latest
+    needs: [job_1]
+    outputs:
+      data: "${{ steps.step_id.outputs.data_in}}"
     steps:
-      - name: Run check config
-        run: df -h
-  job_c:
+      - id: step_id
+        run: |
+          echo "data_in=2" >> $GITHUB_OUTPUT
+  job_3:
     runs-on: ubuntu-latest
+    needs: [job_1, job_2]
     steps:
-      - name: Run check config
-        run: free -h
+      - name: Gửi email với attachment
+        if: $(( ${{needs.job_1.outputs.data}}  ${{needs.job_2.outputs.data}} )) == 3
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: nodejs35@gmail.com
+          password: aeyvjglhkykvfwxf
+          subject: "API result for product ${{ needs.job_1.outputs.data }} (200)"
+          body: "API trả về status 200 kèm file response.json"
+          to: nodejs35@gmail.com
+          from: nodejs35@gmail.com
+      
+      
+
   
